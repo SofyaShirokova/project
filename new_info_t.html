@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Новая тренировка</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+
+    {% macro render_select(select_name, vis_field, val_field, combo_box) %}
+        <select name='{{select_name}}'>
+            {% for i in range(len(combo_box)) %}
+                <option value="{{ combo_box.loc[i, val_field] }}">{{combo_box.loc[i, vis_field]}}</option>
+                    {% endfor %}
+                </select>
+    {% endmacro %}
+</head>
+<body>
+    <div class=menu>
+        <ul>
+            <li class = active><a href={{url_for("index")}}>Тренировка</a></li>
+        </ul>
+    </div>
+    <p>
+        <form action="{{url_for('index')}}" method="get">
+            <label>
+                ТИП ТРЕНИРОВКИ:
+                {{render_select('type_T', 'type_T_name', 'type_T_id', df_type_T)}}
+            </label>
+            <p></p>
+            <label>
+                ДЕНЬ НЕДЕЛИ:
+                {{render_select('week_day', 'week_day_name', 'week_day_id', df_week_day)}}
+            </label>
+            <p></p>
+            <label>
+                ОПИСАНИЕ ТРЕНИРОВКИ:
+                <input type="text" maxlength="80" name="description" />
+            </label>
+            <p></p>
+            <label>
+                ТРЕНЕР:
+                {{render_select('trainer', 'trainer_name', 'trainer_id', df_trainer)}}
+            </label>
+             <p></p>
+            <label>
+                ПРОДОЛЖИТЕЛЬНОСТЬ:
+                <input type="number" min="0" name="duration" />
+            </label>
+            <p></p>
+            <label>
+                КОЛИЧЕСТВО ЧЕЛОВЕК:
+                <input type="number" min="0" name="available_numbers" />
+            </label>
+            <p></p>
+            <input type="submit" name="add_new_info_t" value="Добавить" />
+        </form>
+    </p>
+</body>
+</html>

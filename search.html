@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+    <title> Поиск тренировки </title>
+    {% macro render_checkbox(relation, selected_list, name) %}
+        {% for i in range(relation|length) %}
+            {% set value = relation.loc[i, relation.dtypes.index[0]] %}
+            <div class="flex row">
+            <input 
+                type="checkbox" 
+                name="{{name}}" 
+                value="{{value}}" 
+                {% if value in selected_list %} checked="checked" {% endif %}
+            />{{value + " (" + relation.loc[i, relation.dtypes.index[1]]|string + ")"}}
+            </div>
+        {% endfor %}
+    {% endmacro %}
+
+    {% macro render_info_ts(df_info_ts) %}
+        {% for i in range(df_info_ts|length) %}
+            <div class="flex column width50">
+                <p>Описание: {{df_info_ts.loc[i, "description"]}}</p>
+                <p>Тренер: {{df_info_ts.loc[i, "trainers"]}}</p>
+                <p>Тип тренировки: {{df_info_ts.loc[i, "type_T_name"]}}</p>
+                <p>День недели: {{df_info_ts.loc[i, "week_day_name"]}}</p>
+                <p>Количество оставшихся мест: {{df_info_ts.loc[i, "available_numbers"]}}</p>
+                <p>Продолжительность тренировки: {{df_info_ts.loc[i, "duration"]}} мин.</p>
+
+                <form action='{{url_for("index")}}' method ="get">
+
+                    <input type="hidden" value="{{df_info_ts.loc[i, 'info_t_id']}}" name="info_t">
+                    <input type="submit" value="Выбрать" {% if not df_info_ts.loc[i, "available_numbers"] %} disabled="disabled" {% endif %}>
+                </form> 
+            </div> 
+        {% endfor %}
+    {% endmacro %}
+</head>
+<body>
+    <div class=menu>
+        <ul>
+            <li class = active><a href={{url_for("search")}}>Поиск тренировки</a></li>
+        </ul>
+    </div>
+    <div class=block>
+        <p>
+            <form action='' method ="post">
+                <div class="flex row">
+                    <div class="flex column width15">
+                        <div class="flex column">
+                            <details><summary>Тренера</summary>{{ render_checkbox(df_trainers, selected_trainers, "trainers") }}</details>
+                            <details><summary>Типы тренировок</summary>{{ render_checkbox(df_type_Ts, selected_type_Ts, "type_Ts")}}</details>
+                            <details><summary>Дни недели</summary>{{ render_checkbox(df_week_days, selected_week_days, "week_days")}}</details>
+                        </div>
+                        <input type="submit" value="Очистить" name="reset" />
+                        <input type="submit" value="Применить" name="confirm" />
+                    </div>
+                    <div class="flex column width85">
+                        <div class="flex column">
+                            <div class="block">
+                                {% if selected_trainers %}
+                                    Тренера: {{", ".join(selected_trainers)}} <br>
+                                {% endif %}
+                                {% if selected_type_Ts %}
+                                    Типы тренировок: {{", ".join(selected_type_Ts)}} <br>
+                                {% endif %}
+                                {% if selected_week_days %}
+                                    Дни недели: {{", ".join(selected_week_days)}}
+                                {% endif %}
+                            </div>
+            </form>
+                            <div class="flex row wrap">
+                                {{ render_info_ts(df_info_ts) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            <form action='{{url_for("index")}}' method ="get">
+                <input type="submit" value="Продолжать лежебочить" />
+            </form> 
+        </p>
+    </div>
+</body>
+</html>

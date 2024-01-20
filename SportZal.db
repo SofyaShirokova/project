@@ -1,0 +1,217 @@
+DROP TABLE IF EXISTS trainer;
+
+CREATE TABLE trainer (
+       trainer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+	   trainer_name VARCHAR(30)
+);
+
+INSERT INTO trainer (trainer_name)  VALUES
+('Борщевкий И.О.'),
+('Пяткин А.В.'),
+('Федоров А.М.'),
+('Майоров С.В.'),
+('Корогод Д.А.'),
+('Широкова С.С.'),
+('Чемериская Е.В.'),
+('Доржиев А.С.'),
+('Аюров Р.С.'),
+('Шулятьев А.В.'),
+('Полянская Э.М.');
+
+DROP TABLE IF EXISTS type_T;
+
+CREATE TABLE type_T (
+       type_T_id INTEGER PRIMARY KEY AUTOINCREMENT,
+	   type_T_name VARCHAR(30)
+);
+
+INSERT INTO type_T (type_T_name)  VALUES
+('Йога'),
+('Айробика'),
+('Пилатес'),
+('Велоспорт'),
+('Силовая'),
+('Кардио');
+
+DROP TABLE IF EXISTS week_day;
+
+CREATE TABLE week_day (
+       week_day_id INTEGER PRIMARY KEY AUTOINCREMENT,
+	   week_day_name VARCHAR(40)
+);
+
+INSERT INTO week_day (week_day_name)  VALUES
+('Понедельник'),
+('Вторник'),
+('Среда'),
+('Четверг'),
+('Пятница'),
+('Суббота'),
+('Воскресенье');
+
+DROP TABLE IF EXISTS sportsmen;
+
+CREATE TABLE sportsmen (
+       sportsmen_id INTEGER PRIMARY KEY AUTOINCREMENT,
+	   sportsmen_name VARCHAR(30)
+);
+
+INSERT INTO sportsmen (sportsmen_name)  VALUES
+('Иванов М.С.'),
+('Петров Ф.С.'),
+('Федоров П.Р.'),
+('Абрамова А.А.'),
+('Самарин С.С.'),
+('Туполев И.Д.'),
+('Баранов П.В.');
+
+
+DROP TABLE IF EXISTS info_t;
+
+CREATE TABLE info_t (
+      info_t_id INTEGER PRIMARY KEY AUTOINCREMENT,
+	  description VARCHAR(80),
+      type_T_id int,
+      week_day_id INT,
+      duration INT,
+      available_numbers INT,
+      FOREIGN KEY (type_T_id)  REFERENCES type_T (type_T_id) ON DELETE CASCADE,
+      FOREIGN KEY (week_day_id)  REFERENCES week_day (week_day_id) ON DELETE CASCADE
+);
+
+INSERT INTO info_t(description, type_T_id, week_day_id, duration, available_numbers)  VALUES
+('Йога 60+', 1, 3, 90, 1),
+('Йога 40+', 1, 1, 60, 3),
+('Йога 25+', 1, 5, 70, 5),
+('Аэробика степ', 2, 4, 45, 0),
+('Пилатес с спорт снарядами', 3, 5, 88, 2),
+('Йога fast', 1, 4, 51, 8),
+('Велоспорт для взрослых', 4, 6, 120, 0),
+('Силовая с гирями', 5, 5, 50, 2),
+('Силовая с гирями', 5, 3, 60, 9),
+('Йога 60+', 1, 5, 90, 7),
+('Йога fast', 1, 5, 120, 6),
+('Силовая со штангой', 5, 3, 20, 2),
+('Аэробика фитбол', 2, 5, 20, 5),
+('Пилатес без спорт снарядов', 3, 1, 45, 8),
+('Пилатес с спорт снарядами', 3, 4, 60, 9),
+('Пилатос силовой методики', 3, 5, 70, 5),
+('Йога long', 1, 4, 90, 5),
+('Пилатос силовой методики', 3, 4, 120, 0),
+('Пилатос силовой методики', 3, 3, 120, 1),
+('Пилатос силовой методики', 3, 5, 65, 1),
+('Аэробика для беременных', 2, 2, 50, 0),
+('Велоспорт для взрослых', 4, 1, 50, 6),
+('Велоспорт для детей', 4, 6, 70, 8),
+('Йога long', 1, 6, 65, 2),
+('Велоспорт для взрослых', 4, 3, 120, 5),
+('Йога fast', 1, 2, 45, 3),
+('Велоспорт для детей', 4, 3, 65, 2),
+('Велоспорт для детей', 4, 4, 70, 5),
+('Пилатос алегро', 3, 5, 88, 2);
+
+DROP TABLE IF EXISTS info_t_trainer;
+
+CREATE TABLE info_t_trainer (
+      info_t_trainer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+      info_t_id INT,
+      trainer_id INT,
+      FOREIGN KEY (info_t_id)  REFERENCES info_t (info_t_id) ON DELETE CASCADE,
+      FOREIGN KEY (trainer_id)  REFERENCES trainer (trainer_id) ON DELETE CASCADE
+);
+
+INSERT INTO info_t_trainer(info_t_id, trainer_id)  VALUES
+(1, 4),
+(1, 5),
+(2, 4),
+(2, 5),
+(3, 6),
+(4, 3),
+(5, 2),
+(6, 1),
+(7, 7),
+(8, 8),
+(8, 9),
+(9, 8),
+(9, 9),
+(10, 1),
+(11, 6),
+(12, 8),
+(12, 9),
+(13, 3),
+(14, 2),
+(15, 2),
+(16, 2),
+(17, 1),
+(18, 10),
+(19, 10),
+(20, 10),
+(21, 10),
+(22, 1),
+(23, 1),
+(24, 7),
+(25, 7),
+(26, 4),
+(26, 5),
+(27, 7),
+(28, 7),
+(29, 2);
+
+DROP TABLE IF EXISTS info_t_sportsmen;
+
+CREATE TABLE info_t_sportsmen (
+      info_t_sportsmen_id INTEGER PRIMARY KEY AUTOINCREMENT,
+      info_t_id int,
+      sportsmen_id INT,
+	  borrow_date DATE,
+	  return_date DATE,
+      FOREIGN KEY (info_t_id)  REFERENCES info_t (info_t_id) ON DELETE CASCADE,
+      FOREIGN KEY (sportsmen_id)  REFERENCES sportsmen (sportsmen_id) ON DELETE CASCADE
+);
+
+INSERT INTO info_t_sportsmen(info_t_id, sportsmen_id, borrow_date, return_date)  VALUES
+( 4, 4, '2020-09-11', '2020-09-24'),
+( 12, 6, '2020-09-11', Null),
+( 29, 5, '2020-09-17', '2020-10-10'),
+( 27, 6, '2020-09-18', '2020-10-14'),
+( 15, 4, '2020-09-18', '2020-10-04'),
+( 18, 1, '2020-09-21', '2020-10-09'),
+( 22, 4, '2020-09-25', '2020-10-10'),
+( 1, 3, '2020-09-28', '2020-10-07'),
+( 26, 2, '2020-09-30', '2020-10-08'),
+( 27, 1, '2020-10-05', '2020-10-13'),
+( 18, 2, '2020-10-06', NULL),
+( 26, 2, '2020-10-06', '2020-10-26'),
+( 11, 1, '2020-10-06', '2020-10-13'),
+( 3, 5, '2020-10-08', '2020-10-27'),
+( 20, 6, '2020-10-08', '2020-10-23'),
+( 20, 3, '2020-10-09', '2020-10-29'),
+( 2, 2, '2020-10-09', '2020-10-12'),
+( 27, 6, '2020-10-13', '2020-10-17'),
+( 28, 4, '2020-10-15', '2020-11-04'),
+( 5, 1, '2020-10-15', '2020-10-18'),
+( 29, 1, '2020-10-15', '2020-10-29'),
+( 3, 6, '2020-10-15', Null),
+( 9, 6, '2020-10-16', '2020-10-19'),
+( 15, 2, '2020-10-17', '2020-11-08'),
+( 8, 6, '2020-10-19', Null),
+( 18, 1, '2020-10-20', NULL),
+( 23, 5, '2020-10-21', Null),
+( 4, 5, '2020-10-22', '2020-10-28'),
+( 26, 3, '2020-10-23', '2020-10-28'),
+( 5, 6, '2020-10-24', '2020-11-01'),
+( 8, 2, '2020-10-28', '2020-11-18'),
+( 21, 5, '2020-10-30', NUll),
+( 20, 1, '2020-10-30', '2020-11-26'),
+( 14, 4, '2020-10-30', '2020-11-10'),
+( 8, 6, '2020-11-01', Null),
+( 11, 4, '2020-11-06', '2020-11-26'),
+( 28, 6, '2020-11-09', '2020-11-28'),
+( 14, 3, '2020-11-14', Null),
+( 24, 2, '2020-11-15', Null),
+( 5, 6, '2020-11-17', Null),
+( 11, 3, '2020-11-21', '2020-12-12'),
+( 14, 1, '2020-11-23', Null),
+( 4, 5, '2020-11-23', Null),
+( 23, 5, '2020-11-28', Null),
+( 21, 3, '2020-11-29', '2020-12-21');
